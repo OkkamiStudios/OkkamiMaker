@@ -3,8 +3,7 @@
 ## Basic code
 
 
-'''
-
+```
 using OkkamiMaker.Addon;
 using OkkamiMaker.Manager;
 using OkkamiMaker.Minecraft;
@@ -23,5 +22,4 @@ public class Program
     }
 
 }
-
-'''
+```
