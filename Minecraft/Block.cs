@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.Text.Json;
 
-namespace OkkamiMaker
+namespace OkkamiMaker.Minecraft
 {
     public class Block
     {

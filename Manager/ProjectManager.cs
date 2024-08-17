@@ -197,6 +197,46 @@ namespace OkkamiMaker.Manager
             string response = Console.ReadLine()?.Trim().ToLower();
             return response == "s" || response == "si";
         }
+
+        // Método para obtener la ruta de un proyecto por nombre o UUID
+        public static string GetProjectPath(string searchValue)
+        {
+            string projectsPath = FolderManager.GetProjectsPath();
+
+            if (Directory.Exists(projectsPath))
+            {
+                var projectDirectories = Directory.GetDirectories(projectsPath);
+
+                foreach (var projectDir in projectDirectories)
+                {
+                    string projectFilePath = Path.Combine(projectDir, "ProjectOKM.json");
+
+                    if (File.Exists(projectFilePath))
+                    {
+                        try
+                        {
+                            string jsonContent = File.ReadAllText(projectFilePath);
+                            var projectData = JsonConvert.DeserializeObject<ProjectData>(jsonContent);
+
+                            // Comparar nombre o UUID
+                            if (projectData.Metadata.Name.Equals(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                                projectData.Metadata.Uuid.Equals(searchValue, StringComparison.OrdinalIgnoreCase) ||
+                                (projectData.Content.Resource?.Uuid?.Equals(searchValue, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                                (projectData.Content.Data?.Uuid?.Equals(searchValue, StringComparison.OrdinalIgnoreCase) ?? false))
+                            {
+                                return projectDir;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error al leer el archivo JSON en {projectDir}: {ex.Message}");
+                        }
+                    }
+                }
+            }
+
+            return null; // O puedes lanzar una excepción si prefieres
+        }
     }
 
     // Clases para deserializar el archivo JSON

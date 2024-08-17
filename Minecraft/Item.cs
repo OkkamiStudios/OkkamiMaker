@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OkkamiMaker
+namespace OkkamiMaker.Minecraft
 {
     public class Item
     {
         public string Identifier { get; set; }
-        public string Category { get; set; }
-        public string Group { get; set; }
+        string Category { get; set; }
+        string Group { get; set; }
 
         // Diccionario que almacena los componentes del ítem
         public Dictionary<string, object> Components { get; private set; } = new Dictionary<string, object>();
-
-        public Item(string identifier, string category, string group)
+        public Dictionary<string, object> Description { get; private set; } = new Dictionary<string, object>();
+        public Item(string identifier)
         {
             Identifier = identifier;
-            Category = category;
-            Group = group;
+            Description["identifier"] = Identifier;
         }
 
         public string Compile()
@@ -27,21 +26,17 @@ namespace OkkamiMaker
                 format_version = "1.20.50",
                 minecraft_item = new
                 {
-                    description = new
-                    {
-                        identifier = Identifier,
-                        menu_category = new
-                        {
-                            category = Category,
-                        }
-                    },
+                    description = Description,
                     components = Components
                 }
             };
 
             return JsonSerializer.Serialize(itemObject, new JsonSerializerOptions { WriteIndented = true });
         }
-
+        public void MenuCategory()
+        {
+            
+        }
         // Métodos para agregar componentes
         public void Icon(string texture)
         {
